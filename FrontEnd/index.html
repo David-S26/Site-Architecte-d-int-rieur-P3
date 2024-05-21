@@ -63,7 +63,7 @@
 		<section id="contact">
 			<h2>Contact</h2>
 			<p>Vous avez un projet ? Discutons-en !</p>
-			<form action="#" method="post">
+			<form class="pageAdmin" action="#" method="post">
 				<label for="name">Nom</label>
 				<input type="text" name="name" id="name">
 				<label for="email">Email</label>
@@ -84,7 +84,7 @@
 	</footer>
 
 	<!---------- MODALE --------------->
-
+	<!--La première div represente la gallery photo + les projets + icone supp + btn ajouter une photos-->
 	<div id="modal" class="modalOverlay" aria-hidden="true" role="dialog" aria-labelledby="titleModalOverlay"
 		style="display:none,">
 		<div id="modalWorks" class="modalGallery">
@@ -96,7 +96,7 @@
 				<button id="addPixModal">Ajouter une photo</button>
 			</div>
 		</div>
-
+		<!--La Deuxième partie reprsente la suite une fois le Btn ajouter activé + photo à inséré + titre de l'img + catégorie-->
 		<div id="modalEdit" class="modalEditWorks">
 			<div class="iconsSecondWindowContainer">
 				<a id="arrowReturn" href="#"><i class="fa-solid fa-arrow-left"></i></a>
@@ -104,7 +104,7 @@
 			</div>
 			<h3 class="modalTitle">Ajout photo</h3>
 			<form action="#" method="post" id="modalEditWorkForm">
-				<div id="editNewPhoto" class="contentNewPhoto">
+				<div id="editNewPhotos" class="contentNewPhoto">
 					<i id="addIconPhoto" class="fa-regular fa-image"></i>
 					<label id="newImage">+ Ajouter photo</label><br>
 					<input id="formImage" type="file" name="image" accept="image/*, .jpg, .jpeg, .png" required>

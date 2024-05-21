@@ -391,6 +391,11 @@ nav a:hover {
 	color: #B1663C;
 }
 
+.pageAdmin #email {
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+
 input#email,
 input#password {
 	width: 379px;
@@ -519,8 +524,7 @@ input#password {
 
 /********************************* Modal  ********************************/
 
-/****** GENERAL ***********/
-
+/*** Filtre Sombre du modal display actif et non actif depend si l'utilisateur est connecté ****/
 .modalOverlay {
 	position: fixed;
 	display: flex;
@@ -542,11 +546,13 @@ input#password {
 
 .modalGallery {
 	border-radius: 10px;
-	width: 45%;
+	width: 700px;
 	height: 630px;
 	background-color: white;
 	display: none;
-	transform: translate(60%, 15%);
+	position: absolute;
+	top: 30%;
+	left: 38%;
 }
 
 .modalContent {
@@ -583,6 +589,8 @@ input#password {
 	border: 3px solid black;
 	font-size: .8em;
 }
+
+
 
 #addPixModal {
 	width: 237px;
@@ -632,11 +640,13 @@ hr {
 .modalEditWorks {
 	display: flex;
 	border-radius: 10px;
-	width: 45%;
+	width: 700px;
 	height: 630px;
 	background-color: white;
 	display: none;
-	transform: translate(60%, 15%);
+	position: absolute;
+	top: 30%;
+	left: 38%;
 }
 
 .iconsSecondWindowContainer {
