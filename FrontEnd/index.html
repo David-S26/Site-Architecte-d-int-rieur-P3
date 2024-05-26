@@ -108,14 +108,15 @@
 					<i id="addIconPhoto" class="fa-regular fa-image"></i>
 					<label id="newImage">+ Ajouter photo</label><br>
 					<input id="formImage" type="file" name="image" accept="image/*, .jpg, .jpeg, .png" required>
-					<p id="maxSize">jpg, png : 4Mo max</p>
+					<div class='profile_img'></div>
+					<p id=" maxSize">jpg, png : 4Mo max</p>
 				</div>
 				<div class="modalNewCategoryTitle">
 					<label for="formTitle">Titre</label>
 					<input type="text" name="title" id="formTitle" value="" required>
 					<label for="formCategory">Catégorie</label>
 					<select class="chooseCategory" id="formCategory" required>
-						<option value=""></option>
+						<option value="Tous"></option>
 					</select>
 					<hr>
 					<input type="submit" id="submitNewWork" value="Valider">

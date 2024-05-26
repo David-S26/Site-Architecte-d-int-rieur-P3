@@ -204,6 +204,14 @@ const displayCategoryModal = (category) => {
   myChoices.setAttribute("value", category.id);
   myChoices.textContent = category.name;
   document.querySelector(".chooseCategory").appendChild(myChoices);
+
+  //Option tous dans ma liste déroulante sera masqué
+  const optionToHide = document.querySelector(
+    '.chooseCategory option[value="all"]'
+  );
+  if (optionToHide) {
+    optionToHide.style.display = "none";
+  }
 };
 
 // Fonction global //
@@ -249,7 +257,7 @@ document
         }
       })
       .then(function (json) {
-        // On recrée l'élément HTML qui contient toutes les balises requises //
+        // On recrée l'élément HTML qui contient toutes les balises requises //modal
 
         let pageFigure = document.createElement("figure"); // <figure> //
         pageFigure.setAttribute("id", json.id);
@@ -335,28 +343,28 @@ document
 
 //2eme partie du modal avec prévisualisation  du modal + taille adapter a 1024  // + 3eme partie validation de la photo dans le portfolio
 //faire attention au ID des img pour add et supp
-document.getElementById("formImage").addEventListener("change", () => {
-  const formImgPreview = document.getElementById("formImage");
-  if (formImgPreview.files[0].size > 4 * 1024 * 1024) {
-    alert("Fichier sélectionné trop volumineux. Taille max à 4Mo");
-    formImgPreview.value = "";
-  } else {
-    if (formImgPreview.files[0].size <= 4 * 1024 * 1024) {
-      let previewImg = document.createElement("img");
-      previewImg.setAttribute("id", "previewFormImage");
-      previewImg.src = URL.createObjectURL(formImgPreview.files[0]);
-      document.querySelector("#editNewPhoto").appendChild(previewImg);
-      previewImg.style.display = "block";
-      previewImg.style.height = "169px";
-      document.getElementById("addIconPhoto").style.display = "none";
-      document.getElementById("newImage").style.display = "none";
-      document.getElementById("editNewPhoto").style.padding = 0;
-      document.getElementById("maxSize").style.display = "none";
-    }
-  }
-});
+document
+  .getElementById("formImage")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    const profileImgDiv = document.querySelector(".profile_img");
 
-// Bouton valider //demande un exemple sur le closest
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profileImgDiv.innerHTML = "";
+
+        const img = document.createElement("img");
+        img.src = e.target.result;
+
+        profileImgDiv.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      profileImgDiv.innerHTML = "<p>Aucune image sélectionnée</p>";
+    }
+    verifyProject();
+  });
 //on selectionne puis on mets un addevenlistner sur nos input afin de creer notre function Verifyprojet
 // cela permettra a notre function de verifier la conformiter de nos input  qui sont bien remplit
 //Une fois les conditions remplis notre bouton valider sera valide
@@ -376,4 +384,20 @@ function verifyProject() {
   } else {
     document.getElementById("submitNewWork").style.backgroundColor = "#1D6154";
   }
+}
+
+// la const permet de manipuler mon option déroulante
+//on récupère l'ID puis on le stock, ces éléments sont supposer etre dans le select de l'HTML
+
+const formCategory = document.getElementById("formCategory");
+const optionToReplace = Array.from(formCategory.options).find(
+  // ^ puis notre 2eme const va permettre de seletion le  tableau à partir de l'option déroulant et utilise 'find()'
+
+  (option) => option.value === "Tous"
+);
+// si "Tous" est trouvée dans le menu déroulant
+
+if (optionToReplace) {
+  optionToReplace.value = ""; //Si "tous" est trouvé ca partie sera vide et sans valeur
+  optionToReplace.textContent = "Veuillez sélectionner une catégorie"; //On va modifier le texte "Tous" pour indiquer à l'utilisateur de sélectionner une catégorie sans changer la valeur interne des autres catégrie, seulement le texte
 }
