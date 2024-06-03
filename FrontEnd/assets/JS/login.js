@@ -3,7 +3,7 @@ const btnConnect = document.querySelector(".submit-btn");
 const boxEmail = document.getElementById("email");
 const boxPassword = document.getElementById("password");
 document.getElementById("errorMessage").style.display = "none";
-
+// Ecouteur d'événement sur le bouton submit
 btnConnect.addEventListener("click", function (e) {
   e.preventDefault();
   const boxLogin = {

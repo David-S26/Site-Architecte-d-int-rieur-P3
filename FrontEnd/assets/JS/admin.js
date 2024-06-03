@@ -21,7 +21,7 @@ if (
     window.location.reload();
   });
 
-  // Ouverture de la 1ere modal par le bouton "modifier" //
+  //1. Ouverture de la 1ere modal par le bouton "modifier" //
 
   document
     .getElementById("updateWorks")
@@ -33,7 +33,7 @@ if (
       document.getElementById("modalEdit").style.display = "none";
     });
 
-  // Fermeture de la 1ere modal//
+  // 2. Fermeture de la 1ere modal//
 
   document
     .getElementById("btnCloseFirstWindow")
@@ -44,7 +44,7 @@ if (
       document.getElementById("modalWorks").style.display = "none";
     });
 
-  // Fermeture de la 2eme modal//
+  //3 Fermeture de la 2eme modal//
 
   document
     .getElementById("btnCloseSecondWindow")

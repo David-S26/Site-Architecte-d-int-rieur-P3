@@ -522,9 +522,7 @@ input#password {
 	padding-right: 10px;
 }
 
-/********************************* Modal  ********************************/
-
-/*** Filtre Sombre du modal display actif et non actif depend si l'utilisateur est connecté ****/
+/**************************** Modal  ***************************/
 .modalOverlay {
 	position: fixed;
 	display: flex;
@@ -589,8 +587,6 @@ input#password {
 	border: 3px solid black;
 	font-size: .8em;
 }
-
-
 
 #addPixModal {
 	width: 237px;

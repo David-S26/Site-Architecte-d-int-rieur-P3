@@ -1,21 +1,22 @@
 let worksList = []; // [] permet de crer un tableau  //
 let categoriesList = [];
 let filtersContainer = document.querySelector(".filters");
-let category;
+let category; //variable contenant nos différent catégories de notre API //
 
+// 1. récuperation des categorie//
 const getCategories = () => {
   fetch("http://localhost:5678/api/categories")
     .then((res) => res.json())
     .then((categories) => {
       categoriesList = categories;
-
-      displayCategory({ id: "all", name: "Tous" }); // ajout manuel de la catégorie "Tous" en utilisant la fonction displayCategory
+      // 2. Ajout btn "Tous" et affichage des filtres catégorie //
+      displayCategory({ id: "all", name: "Tous" });
       categories.forEach((category) => displayCategory(category));
       setupEventListeners();
     })
     .catch((error) => console.error(error));
 };
-
+// 3. affichage catégorie
 const displayCategory = (category) => {
   let button = document.createElement("button");
   button.className = "filterButton";
@@ -24,9 +25,7 @@ const displayCategory = (category) => {
   filtersContainer.appendChild(button);
 };
 
-// Fonction Listenner  pour les catégorie
-
-// un Show all work lorsqu'on clic sur tous//voir autrement au cas ou
+// 4. un Show all work lorsqu'on clic sur tous//
 const setupEventListeners = () => {
   document.querySelectorAll(".filterButton").forEach((button) => {
     button.addEventListener("click", () => {
@@ -44,7 +43,7 @@ const setupEventListeners = () => {
   });
 };
 
-//recup du work afin de recuprer les projets
+// 5. Appel fecth pour récupréré les travaux //
 const getWorks = () => {
   fetch("http://localhost:5678/api/works")
     .then((res) => res.json())
@@ -55,21 +54,20 @@ const getWorks = () => {
     .catch((error) => console.error(error));
 };
 
-//1er fonction , elle affiches les projets
-// 2eme fonction, elle permet de filtrer les projets par categories et de les afficher par consequence
-
+// 6. Nettoyage de la Galerie avant d'afficher les nouveaux éléments //
 const displayAllWorks = () => {
   clearGallery();
   worksList.forEach((work) => displayWork(work));
 };
 
+// 7. Création des filtres
 const displayFilteredWorks = (selectedCategory) => {
   clearGallery();
   worksList
     .filter((work) => work.categoryId === selectedCategory) // 2eme par ici
     .forEach((work) => displayWork(work));
 };
-
+// 8. Création des éléments HTML pour afficher les projets en JS //
 const displayWork = (work) => {
   let pageFigure = document.createElement("figure");
   pageFigure.setAttribute("id", work.id);
@@ -87,7 +85,7 @@ const displayWork = (work) => {
   document.querySelector("div.gallery").appendChild(pageFigure);
 };
 
-// fonction pour supprimer de la gallery
+// 9. Nettoyage de la Galerie //
 const clearGallery = () => {
   document.querySelector("div.gallery").innerHTML = "";
 };
@@ -96,8 +94,8 @@ const clearGallery = () => {
 getCategories();
 getWorks();
 
-/////////////////////////////// Ajout des projets sur la modale //////////////////////////////////
-
+///////////////////////// Ajout des projets sur la modale ////////////////////////
+//10. appel de l'API  avec fetch
 const getWorksModal = () => {
   fetch("http://localhost:5678/api/works")
     .then((res) => res.json())
@@ -108,21 +106,20 @@ const getWorksModal = () => {
     .catch((error) => console.error(error));
 };
 
-//1er fonction , elle affiches les projets
-// 2eme fonction, elle permet de filtrer les projets par categories et de les afficher par consequence
-
+// 2eme fonction,
+// 11.1 On vide  le contenue avant d'afficher les projets
 const displayAllWorksModal = () => {
   clearGalleryModal();
   worksList.forEach((work) => displayWorkModal(work));
 };
-
+// 11.2 Vide le contenu, elle permet de filtrer les projets par categories et de les afficher par consequence
 const displayFilteredWorksModal = (selectedCategory) => {
   clearGalleryModal();
   worksList
     .filter((work) => work.categoryId === selectedCategory) //2eme par ici triage
     .forEach((work) => displayWorkModal(work));
 };
-
+// Comme pour la création HTML de la Galerie, le principe est le même
 const displayWorkModal = (work) => {
   let pageFigure = document.createElement("figure");
   pageFigure.setAttribute("id", work.id);
@@ -132,15 +129,15 @@ const displayWorkModal = (work) => {
   pageImg.setAttribute("src", work.imageUrl);
   pageImg.setAttribute("alt", work.title);
   pageFigure.appendChild(pageImg);
-  // creation var poubelle + valeur //
+  // creation la fonction de la corbeille = trashIcon// on lui donne pour élément HTML "i"
+  //on ajoute la class "fa-solid etc...." puis on ajoute  trashIcon comme enfant à pageFigure
   let trashIcon = document.createElement("i");
   trashIcon.classList.add("fa-solid", "fa-trash-can", "trash");
   pageFigure.appendChild(trashIcon);
-
+  //On séléction notre div modalContent et on ajoute PageFigure en tant qu'enfant de notre div
   document.querySelector("div.modalContent").appendChild(pageFigure);
 
-  // Suppression des projets dans la galerie de la modal //
-
+  //12. Suppression des projets dans la galerie de la modal //
   trashIcon.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -149,10 +146,11 @@ const displayWorkModal = (work) => {
         Authorization: "Bearer " + localStorage.getItem("token"),
       }; // Bien mettre l'espace après Bearer //
       console.log(headers);
+      // methode delete pour supprimer du serveur les ressources identifiée par son ID
       fetch("http://localhost:5678/api/works/" + work.id, {
         method: "DELETE",
         headers: headers,
-      })
+      }) // Alerte indiquant différent problème
         .then(function (res) {
           // Erreur sur le status de la suppressions //
           switch (res.status) {
@@ -179,13 +177,14 @@ const displayWorkModal = (work) => {
   });
 };
 
-// fonction pour nettoyer la galerie et qu'on appellera à chaque nouveau filtrage pour effacer les projets précédents
+//La fonction permet de créer une chaine vide ce qui garantit  la modal vide avant d'ajouter de nouveaux éléments
 const clearGalleryModal = () => {
   document.querySelector("div.modalContent").innerHTML = "";
 };
 
 // Ajout des catégories pour les options dans les nouveaux projets de la modale //
-
+// Effectue une requete GET
+// 13. Fonction pour   l'option déroulant  dans la modal //
 const getCategoriesModal = () => {
   fetch("http://localhost:5678/api/categories")
     .then((res) => res.json())
@@ -198,7 +197,7 @@ const getCategoriesModal = () => {
     })
     .catch((error) => console.error(error));
 };
-
+//13.2
 const displayCategoryModal = (category) => {
   let myChoices = document.createElement("option");
   myChoices.setAttribute("value", category.id);
@@ -215,12 +214,10 @@ const displayCategoryModal = (category) => {
 };
 
 // Fonction global //
-
 getWorksModal();
 getCategoriesModal();
 
-// Ajout d'un nouveau projet via le formulaire de la modale //
-
+// 14.1 Ajout de projet via la modal ///
 document
   .getElementById("modalEditWorkForm")
   .addEventListener("submit", function (e) {
@@ -233,6 +230,7 @@ document
     fetch("http://localhost:5678/api/works", {
       // Fetch POST pour envoyer sur le DOM //
       method: "POST",
+      //On inclut une authorisation dans l'en-tete de la requete
       headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       body: formData,
     })
@@ -256,9 +254,13 @@ document
             break;
         }
       })
+      //14.2 Affichages des projets dans la modal et Galerie //
       .then(function (json) {
         // On recrée l'élément HTML qui contient toutes les balises requises //modal
+        //Comme pour l'affichage des projet dans le portfolio on recréer les éléments HTML //
+        //Pour afficher les projets à la fois dans la modal principal et dans la galerie portfolio //
 
+        // Création et insertion des éléments HTML //
         let pageFigure = document.createElement("figure"); // <figure> //
         pageFigure.setAttribute("id", json.id);
         pageFigure.setAttribute("class", json.categoryId);
@@ -273,7 +275,7 @@ document
         pageFigure.appendChild(pageFigcaption);
 
         document.querySelector("div.gallery").appendChild(pageFigure); // Ajout dynamique du nouveau projet dans la <div> gallery //
-
+        // Ajout des projets dans la modal dans la 1ere modal //
         let modalFigure = document.createElement("figure"); // <figure> //
         modalFigure.setAttribute("id", json.id);
         modalFigure.setAttribute("class", json.categoryId);
@@ -282,8 +284,8 @@ document
         modalImg.setAttribute("src", json.imageUrl);
         modalImg.setAttribute("alt", json.title);
         modalFigure.appendChild(modalImg);
-
-        let trashIcon = document.createElement("i"); // icone supp//
+        // Gestion de la suppression de projet //
+        let trashIcon = document.createElement("i"); // icone supp//Event Click// actif lorsqu'on clicl sur l'icone// Envoie une Requete delete à l'API
         trashIcon.classList.add("fa-solid", "fa-trash-can", "trash");
         modalFigure.appendChild(trashIcon);
 
@@ -294,7 +296,7 @@ document
           if (confirm("Voulez-vous vraiment supprimer ce projet ?")) {
             const headers = {
               Authorization: "Bearer " + localStorage.getItem("token"),
-            }; // Bien mettre l'espace après Bearer //
+            }; // Toujour !! mettre un espace après Bearer !!  //
             fetch("http://localhost:5678/api/works/" + json.id, {
               method: "DELETE",
               headers: headers,
@@ -325,10 +327,11 @@ document
               });
           }
         });
-
+        // Ajout dynamique de projet à la 1ere modal
         document.querySelector("div.modalContent").appendChild(modalFigure); // Ajout dynamique du nouveau projet dans la <div> modalContent //
 
         document.getElementById("modalEditWorkForm").reset(); // Reset de la fenêtre d'ajout de projet après un ajout effectué //
+        // (Suite) reintialise le formulaire d'ajout  en effacant tout les champs du formulaire et remet leur champs à leurs valeurs par défaut
         document.getElementById("addPhoto").style.display = "block";
         document.getElementById("newImage").style.display = "block";
         document.getElementById("maxSize").style.display = "block";
@@ -341,29 +344,30 @@ document
       });
   });
 
-//2eme partie du modal avec prévisualisation  du modal + taille adapter a 1024  // + 3eme partie validation de la photo dans le portfolio
-//faire attention au ID des img pour add et supp
+//15. Prévisualisation  de l'img Upload dans la Deuxième modal  avant validation//
 document
   .getElementById("formImage")
   .addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    const profileImgDiv = document.querySelector(".profile_img");
+    const file = event.target.files[0]; // récupère le premier fichier séléctionné par l'utilisateur
+    const profileImgDiv = document.querySelector(".profile_img"); // référence pour afficher l'img en prévisu
 
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader(); // Permet de lire le contenu du ficher
       reader.onload = function (e) {
-        profileImgDiv.innerHTML = "";
+        // methode onload  définie ce qui doit se passer lorsque le ficher est completement lu
+        profileImgDiv.innerHTML = ""; // après être lu, cette élément est vidé de son contenue actuel
 
-        const img = document.createElement("img");
+        const img = document.createElement("img"); // creation de notre élément img
         img.src = e.target.result;
 
         profileImgDiv.appendChild(img);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // reader.readAsDataUR, li  le fichier et déclenche l'évent onload après lecture fini
     } else {
-      profileImgDiv.innerHTML = "<p>Aucune image sélectionnée</p>";
+      profileImgDiv.innerHTML = "<p>Aucune image sélectionnée</p>"; // ce met toujours à jour en indiquant un msg
     }
-    verifyProject();
+    verifyProject(); // on créer la fonction verifyproject qu'on définira dans la 2eme partie, elle permettra de valider le projet
+    // après que certain champs sont validé
   });
 //on selectionne puis on mets un addevenlistner sur nos input afin de creer notre function Verifyprojet
 // cela permettra a notre function de verifier la conformiter de nos input  qui sont bien remplit
@@ -376,9 +380,9 @@ document
 
 function verifyProject() {
   if (
-    document.getElementById("formImage").files.length === 0 ||
-    document.getElementById("formTitle").value.trim() === "" ||
-    document.getElementById("formCategory").value.trim() === ""
+    document.getElementById("formImage").files.length === 0 || // vérifie si un fichier est séléctionner dans le champ formimage
+    document.getElementById("formTitle").value.trim() === "" || // vérifie si le champ est vide ou non
+    document.getElementById("formCategory").value.trim() === "" // vérifie si le champ déroulant est vide ou non
   ) {
     document.getElementById("submitNewWork").style.backgroundColor = "#b3b3b3";
   } else {
@@ -386,9 +390,10 @@ function verifyProject() {
   }
 }
 
-// la const permet de manipuler mon option déroulante
+// la const permet de manipuler mon option déroulante et de supprimer "Tous" par "Veuillez séléctiionner une catégorie"
 //on récupère l'ID puis on le stock, ces éléments sont supposer etre dans le select de l'HTML
 
+//16. Manipulation du menu déroulant  et reset de la seconde modal
 const formCategory = document.getElementById("formCategory");
 const optionToReplace = Array.from(formCategory.options).find(
   // ^ puis notre 2eme const va permettre de seletion le  tableau à partir de l'option déroulant et utilise 'find()'
@@ -401,3 +406,28 @@ if (optionToReplace) {
   optionToReplace.value = ""; //Si "tous" est trouvé ca partie sera vide et sans valeur
   optionToReplace.textContent = "Veuillez sélectionner une catégorie"; //On va modifier le texte "Tous" pour indiquer à l'utilisateur de sélectionner une catégorie sans changer la valeur interne des autres catégrie, seulement le texte
 }
+// Tips réintialise la 2eme modal après avoir mit une img sans valider  puis fermer la modal, l'img+titre+catégorie seront supprimer du localstorage
+// Fonction pour réinitialiser le formulaire, seconde partie du modal
+//on créer notre fonction reset
+function resetForm() {
+  document.getElementById("formImage").value = ""; // Réinitialise le champ image
+  document.getElementById("formTitle").value = ""; // Réinitialise le champ titre
+  document.getElementById("formCategory").value = ""; // Réinitialise le champ catégorie
+  document.getElementById("submitNewWork").style.backgroundColor = "#b3b3b3"; // Réinitialise la couleur du bouton
+
+  //  On reset l'image de prévisualisation
+  const profileImgDiv = document.querySelector(".profile_img");
+  profileImgDiv.innerHTML = "<p>Aucune image sélectionnée</p>";
+
+  // Supprimer les informations pertinentes du localStorage
+  localStorage.removeItem("formImage");
+  localStorage.removeItem("formTitle");
+  localStorage.removeItem("formCategory");
+}
+
+// Écouteur d'événement pour le bouton de fermeture de la modal
+document
+  .getElementById("btnCloseSecondWindow")
+  .addEventListener("click", function () {
+    resetForm(); // après cick reset le formulaire
+  });
