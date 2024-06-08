@@ -10,7 +10,7 @@ btnConnect.addEventListener("click", function (e) {
     email: boxEmail.value,
     password: boxPassword.value,
   };
-
+  //Le try me permet d'avoir plusieurs instruction dans un block
   try {
     fetch("http://localhost:5678/api/users/login", {
       method: "POST",
@@ -25,7 +25,6 @@ btnConnect.addEventListener("click", function (e) {
           case 503:
             alert("Erreur côté serveur");
             break;
-
           case 401:
           case 404:
             alert("Email ou mot de passe incorrect");
@@ -44,11 +43,12 @@ btnConnect.addEventListener("click", function (e) {
         }
       })
       .then((data) => {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token); //on stock les données//
         localStorage.setItem("userId", data.userId);
 
         location.href = "index.html";
       });
+    // catch() est utile pour gérer les cas d'erreur en cas de compositions de plusieurs promesses //
   } catch {
     console.log(erreur);
   }

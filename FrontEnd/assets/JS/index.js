@@ -9,7 +9,7 @@ const getCategories = () => {
     .then((res) => res.json())
     .then((categories) => {
       categoriesList = categories;
-      // 2. Ajout btn "Tous" et affichage des filtres catégorie //
+      // 2. Ajout btn "Tous" dans la catégorie de L'API et affichage des filtres catégorie //
       displayCategory({ id: "all", name: "Tous" });
       categories.forEach((category) => displayCategory(category));
       setupEventListeners();
@@ -29,7 +29,7 @@ const displayCategory = (category) => {
 const setupEventListeners = () => {
   document.querySelectorAll(".filterButton").forEach((button) => {
     button.addEventListener("click", () => {
-      category = button.dataset.category;
+      category = button.dataset.category; // recoit l'attribut data-catgeory via le bouton //
       document.querySelectorAll(".filterButton").forEach((btn) => {
         btn.classList.remove("selected-category");
       });
@@ -37,8 +37,8 @@ const setupEventListeners = () => {
       if (category === "all") {
         displayAllWorks();
       } else {
-        displayFilteredWorks(parseInt(category));
-      }
+        displayFilteredWorks(parseInt(category)); // La fonction parseInt() analyse la chaîne de caractère fournie en argument et renvoie un entier exprimé dans la base donnée.//
+      } // ce qui nous permet de filtrer les travaux par Leur ID number donnée dans l'API
     });
   });
 };
@@ -112,13 +112,7 @@ const displayAllWorksModal = () => {
   clearGalleryModal();
   worksList.forEach((work) => displayWorkModal(work));
 };
-// 11.2 Vide le contenu, elle permet de filtrer les projets par categories et de les afficher par consequence
-const displayFilteredWorksModal = (selectedCategory) => {
-  clearGalleryModal();
-  worksList
-    .filter((work) => work.categoryId === selectedCategory) //2eme par ici triage
-    .forEach((work) => displayWorkModal(work));
-};
+
 // Comme pour la création HTML de la Galerie, le principe est le même
 const displayWorkModal = (work) => {
   let pageFigure = document.createElement("figure");
@@ -140,9 +134,10 @@ const displayWorkModal = (work) => {
   //12. Suppression des projets dans la galerie de la modal //
   trashIcon.addEventListener("click", function (e) {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation(); //Évite que l'évènement courant ne se propage plus loin dans les phases de capture et de déploiement.//
     if (confirm("Êtes vous de vouloir de supprimer ce projet ?")) {
       const headers = {
+        //Authorization montre au serveur que la requete est faite par un utilisateur
         Authorization: "Bearer " + localStorage.getItem("token"),
       }; // Bien mettre l'espace après Bearer //
       console.log(headers);
@@ -184,7 +179,7 @@ const clearGalleryModal = () => {
 
 // Ajout des catégories pour les options dans les nouveaux projets de la modale //
 // Effectue une requete GET
-// 13. Fonction pour   l'option déroulant  dans la modal //
+// 13.1 Fonction pour l'option déroulant  dans la 2eme modal, on fait apparaitre les catégorie  avant l'option déroulante//
 const getCategoriesModal = () => {
   fetch("http://localhost:5678/api/categories")
     .then((res) => res.json())
@@ -193,11 +188,10 @@ const getCategoriesModal = () => {
 
       displayCategoryModal({ id: "all", name: "Tous" });
       categories.forEach((category) => displayCategoryModal(category));
-      setupEventListeners();
     })
     .catch((error) => console.error(error));
 };
-//13.2
+//13.2 Ajout de l'option déroulante //
 const displayCategoryModal = (category) => {
   let myChoices = document.createElement("option");
   myChoices.setAttribute("value", category.id);
@@ -261,6 +255,7 @@ document
         //Pour afficher les projets à la fois dans la modal principal et dans la galerie portfolio //
 
         // Création et insertion des éléments HTML //
+        //1 Prévisualisation dans la galerie// new project//
         let pageFigure = document.createElement("figure"); // <figure> //
         pageFigure.setAttribute("id", json.id);
         pageFigure.setAttribute("class", json.categoryId);
@@ -275,6 +270,7 @@ document
         pageFigure.appendChild(pageFigcaption);
 
         document.querySelector("div.gallery").appendChild(pageFigure); // Ajout dynamique du nouveau projet dans la <div> gallery //
+
         // Ajout des projets dans la modal dans la 1ere modal //
         let modalFigure = document.createElement("figure"); // <figure> //
         modalFigure.setAttribute("id", json.id);
@@ -289,44 +285,6 @@ document
         trashIcon.classList.add("fa-solid", "fa-trash-can", "trash");
         modalFigure.appendChild(trashIcon);
 
-        trashIcon.addEventListener("click", function (e) {
-          // Suppression directe d'un nouvel ajout //
-          e.preventDefault();
-          e.stopPropagation();
-          if (confirm("Voulez-vous vraiment supprimer ce projet ?")) {
-            const headers = {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            }; // Toujour !! mettre un espace après Bearer !!  //
-            fetch("http://localhost:5678/api/works/" + json.id, {
-              method: "DELETE",
-              headers: headers,
-            })
-              .then(function (res) {
-                // Alerte sur la conformité de la suppression //
-                switch (res.status) {
-                  case 500:
-                  case 503:
-                    alert("Comportement inattendu");
-                    break;
-                  case 401:
-                    alert("Suppression impossible");
-                    break;
-                  case 200:
-                  case 204:
-                    alert("Projet supprimé");
-                    document.getElementById(`${json.id}`).remove(); // id de la galerie //
-                    document.getElementById(`${json.id}`).remove(); // id de la miniature de la modale //
-                    break;
-                  default:
-                    alert("Erreur inconnue");
-                    break;
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }
-        });
         // Ajout dynamique de projet à la 1ere modal
         document.querySelector("div.modalContent").appendChild(modalFigure); // Ajout dynamique du nouveau projet dans la <div> modalContent //
 

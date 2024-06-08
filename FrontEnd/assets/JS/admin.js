@@ -1,7 +1,7 @@
 if (
   // Dans notre admin, ici nous allons récupré les données de notre login situé dans notre fetch .then
-  localStorage.getItem("token") !== null &&
-  localStorage.getItem("userId") !== null
+  localStorage.getItem("token") !== null && // on va récupéré la valeur
+  localStorage.getItem("userId") !== null // Vérifie sir la valeur récupérée n'est pas null ce qui signifie que le token/userid existe
 ) {
   // Vérification du token et et de l'ID de l'admin pour pouvoir se log sur la page administrateur //
   // Une fois que notre à vérifier les données elle nous redirige vers la page index.html  //

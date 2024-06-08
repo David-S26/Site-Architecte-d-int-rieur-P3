@@ -220,8 +220,8 @@ li:hover {
 
 #introduction img {
 	display: block;
-	margin: auto;
-	width: 80%;
+	width: 85%;
+	margin-bottom: 20%;
 }
 
 #introduction article {
@@ -322,7 +322,14 @@ li:hover {
 	flex-direction: column;
 }
 
+.sendContact {
+	max-width: 180px;
+	position: relative;
+	right: 17%;
+}
+
 #contact input {
+	width: 380px;
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -336,6 +343,7 @@ li:hover {
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	width: 380px;
 }
 
 input[type="submit"] {
@@ -389,6 +397,11 @@ a {
 nav a:hover {
 	font-weight: bold;
 	color: #B1663C;
+}
+
+.pageAdmin {
+	position: relative;
+	left: 20%;
 }
 
 .pageAdmin #email {
@@ -466,19 +479,20 @@ input#password {
 /**** Barre noire *****/
 
 #editionMode {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	align-items: center;
 	background-color: black;
 	color: white;
-	width: 1140px;
+	width: 1440px;
 	height: 60px;
 	display: none;
+	position: relative;
+	right: 14%;
+
 }
 
 #editionMode i {
 	padding-right: 10px;
-	padding-left: 550px;
+	padding-left: 670px;
 	padding-top: 20px;
 }
 
